@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Input - ALL IN SIM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .poker-table {
+            background: #0d5016;
+            width: 700px;
+            height: 500px;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+            border: 8px solid #8B4513;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .poker-table-small {
+            background: #0d5016;
+            width: 500px;
+            height: 350px;
+            border-radius: 50%;
+            margin: 10px auto;
+            position: relative;
+            border: 6px solid #8B4513;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .community-cards {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 10px;
+        }
+        .community-cards-small {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 8px;
+        }
+        .card-display {
+            background: white;
+            width: 50px;
+            height: 70px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            border: 2px solid #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .card-display-small {
+            background: white;
+            width: 35px;
+            height: 50px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            border: 2px solid #333;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            animation: cardDeal 0.5s ease-out;
+        }
+        
+        @keyframes cardDeal {
+            0% {
+                transform: translateY(-50px) rotate(-10deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(-10px) rotate(-5deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        
+        .player-display {
+            text-align: center;
+        }
+        
+        .player-cards {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        
+        .player-label {
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        .card-red {
+            color: #dc3545;
+        }
+        .card-black {
+            color: #000;
+        }
+        .player {
+            position: absolute;
+            background: #6c757d;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            min-width: 140px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .player.active {
+            background: #ffc107;
+            color: black;
+            border: 3px solid #ff6b35;
+        }
+        .player-1 { top: 20px; left: 20px; }
+        .player-2 { top: 20px; right: 20px; }
+        .player-3 { bottom: 20px; right: 20px; }
+        .player-4 { bottom: 20px; left: 20px; }
+        .player-card {
+            background: white;
+            width: 30px;
+            height: 40px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 2px;
+            border: 1px solid #ccc;
+        }
+        .player-card.card-red {
+            color: #dc3545;
+        }
+        .player-card.card-black {
+            color: #000;
+        }
+        .odds {
+            margin-top: 8px;
+            font-size: 11px;
+        }
+        .win { color: #28a745; font-weight: bold; }
+        .tie { color: #17a2b8; font-weight: bold; }
+        .card-input {
+            width: 60px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .phase-selector {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .phase-btn {
+            margin: 5px;
+        }
+        .loading {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="bg-dark text-white py-3 shadow">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h1 class="h3 mb-0">
+                            <i class="bi bi-pencil-square me-2"></i>
+                            Manual Input - ALL IN SIM
+                        </h1>
+                        <p class="mb-0 text-muted">Input any poker situation to analyze odds</p>
+                    </div>
+                    <div class="col-auto">
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-light btn-sm" onclick="window.location.href='/'">
+                                <i class="bi bi-house me-1"></i>
+                                Home
+                            </button>
+                            <button class="btn btn-outline-light btn-sm" onclick="window.location.href='/auto'">
+                                <i class="bi bi-play-circle me-1"></i>
+                                Auto Sim
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container py-4">
+            <!-- Phase Selector -->
+            <div class="phase-selector">
+                <h4 class="mb-3">Select Game Phase</h4>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary phase-btn active" onclick="selectPhase('preflop')">
+                        Preflop
+                    </button>
+                    <button type="button" class="btn btn-outline-primary phase-btn" onclick="selectPhase('flop')">
+                        Flop
+                    </button>
+                    <button type="button" class="btn btn-outline-primary phase-btn" onclick="selectPhase('turn')">
+                        Turn
+                    </button>
+                    <button type="button" class="btn btn-outline-primary phase-btn" onclick="selectPhase('river')">
+                        River
+                    </button>
+                </div>
+                <p class="mt-2 text-muted small">Select the current phase of the hand to input the appropriate cards</p>
+            </div>
+
+            <!-- Input Form and Results -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Input Cards</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Number of Players -->
+                            <div class="mb-3">
+                                <label class="form-label">Number of Players</label>
+                                <select class="form-select" id="numPlayers" onchange="updatePlayerInputs()">
+                                    <option value="2">2 Players</option>
+                                    <option value="3">3 Players</option>
+                                    <option value="4" selected>4 Players</option>
+                                    <option value="5">5 Players</option>
+                                    <option value="6">6 Players</option>
+                                </select>
+                            </div>
+
+                            <!-- Player Cards -->
+                            <div id="playerInputs">
+                                <!-- Player inputs will be generated here -->
+                            </div>
+
+                            <!-- Board Cards -->
+                            <div class="mb-3">
+                                <label class="form-label">Community Cards</label>
+                                <div class="row" id="boardInputs">
+                                    <!-- Board inputs will be generated here -->
+                                </div>
+                            </div>
+
+                            <!-- Calculate Button -->
+                            <div class="d-grid">
+                                <button class="btn btn-primary btn-lg" onclick="calculateOdds()">
+                                    <i class="bi bi-calculator me-2"></i>
+                                    Calculate Odds
+                                </button>
+                            </div>
+
+                            <!-- Loading Spinner -->
+                            <div class="loading text-center mt-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-2">Calculating odds...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Results</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="results">
+                                <p class="text-muted text-center">Enter cards and click "Calculate Odds" to see results</p>
+                            </div>
+                            
+                            <!-- Poker Table Display - Inside Results -->
+                            <div class="mt-3">
+                                <div class="poker-table-small">
+                                    <div class="community-cards-small" id="community-cards"></div>
+                                    <div id="players-display">
+                                        <!-- Players will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const suits = ['s', 'h', 'd', 'c'];
+        const faces = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+        const suitSymbols = {'s': '♠', 'h': '♥', 'd': '♦', 'c': '♣'};
+        let currentPhase = 'preflop';
+
+        function formatCard(card) {
+            if (card.length !== 2) return { symbol: card, className: 'card-black' };
+            const face = card[0].toUpperCase();
+            const suit = card[1].toLowerCase();
+            const suitSymbol = suitSymbols[suit];
+            const isRed = suit === 'h' || suit === 'd';
+            return { 
+                symbol: `${face}${suitSymbol}`, 
+                className: isRed ? 'card-red' : 'card-black' 
+            };
+        }
+
+        function selectPhase(phase) {
+            currentPhase = phase;
+            document.querySelectorAll('.phase-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateBoardInputs();
+        }
+
+        function updatePlayerInputs() {
+            const numPlayers = parseInt(document.getElementById('numPlayers').value);
+            const container = document.getElementById('playerInputs');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= numPlayers; i++) {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'mb-3';
+                playerDiv.innerHTML = `
+                    <label class="form-label">Player ${i} Cards</label>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="text" class="form-control card-input" placeholder="As" maxlength="2" 
+                                   id="player${i}card1" onchange="updateTable()">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control card-input" placeholder="Kh" maxlength="2" 
+                                   id="player${i}card2" onchange="updateTable()">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(playerDiv);
+            }
+            updateTable();
+        }
+
+        function updateBoardInputs() {
+            const container = document.getElementById('boardInputs');
+            container.innerHTML = '';
+
+            const cardsNeeded = currentPhase === 'preflop' ? 0 : 
+                               currentPhase === 'flop' ? 3 : 
+                               currentPhase === 'turn' ? 4 : 5;
+
+            for (let i = 0; i < 5; i++) {
+                const col = document.createElement('div');
+                col.className = 'col';
+                col.innerHTML = `
+                    <input type="text" class="form-control card-input" placeholder="2h" maxlength="2" 
+                           id="board${i}" onchange="updateTable()" 
+                           ${i >= cardsNeeded ? 'disabled' : ''}>
+                `;
+                container.appendChild(col);
+            }
+            updateTable();
+        }
+
+        function updateTable() {
+            // Update community cards
+            const communityDiv = document.getElementById('community-cards');
+            const boardCards = [];
+            for (let i = 0; i < 5; i++) {
+                const card = document.getElementById(`board${i}`).value.trim().toLowerCase();
+                if (card && card.length === 2) {
+                    boardCards.push(card);
+                }
+            }
+            
+            communityDiv.innerHTML = boardCards.map(card => {
+                const cardData = formatCard(card);
+                return `<div class="card-display-small ${cardData.className}">${cardData.symbol}</div>`;
+            }).join('');
+
+            // Update players
+            const playersDiv = document.getElementById('players-display');
+            const numPlayers = parseInt(document.getElementById('numPlayers').value);
+            playersDiv.innerHTML = '';
+
+            for (let i = 1; i <= numPlayers; i++) {
+                const card1 = document.getElementById(`player${i}card1`).value.trim().toLowerCase();
+                const card2 = document.getElementById(`player${i}card2`).value.trim().toLowerCase();
+                
+                if (card1 && card2 && card1.length === 2 && card2.length === 2) {
+                    const playerDiv = document.createElement('div');
+                    playerDiv.className = `player player-${i} ${i === 1 ? 'active' : ''}`;
+                    playerDiv.innerHTML = `
+                        <div>Player ${i}</div>
+                        <div>
+                            <div class="player-card ${formatCard(card1).className}">${formatCard(card1).symbol}</div>
+                            <div class="player-card ${formatCard(card2).className}">${formatCard(card2).symbol}</div>
+                        </div>
+                        <div class="odds" id="player${i}-odds"></div>
+                    `;
+                    playersDiv.appendChild(playerDiv);
+                }
+            }
+        }
+
+        function validateInputs(hands, board) {
+            const allCards = [];
+            
+            // Check for duplicates
+            for (let i = 0; i < hands.length; i++) {
+                for (let j = 0; j < hands[i].length; j++) {
+                    const card = hands[i][j];
+                    if (allCards.includes(card)) {
+                        return `Duplicate card '${card.toUpperCase()}' found`;
+                    }
+                    allCards.push(card);
+                }
+            }
+            
+            for (let i = 0; i < board.length; i++) {
+                const card = board[i];
+                if (allCards.includes(card)) {
+                    return `Duplicate card '${card.toUpperCase()}' found`;
+                }
+                allCards.push(card);
+            }
+            
+            return null;
+        }
+
+        async function calculateOdds() {
+            const loading = document.querySelector('.loading');
+            const results = document.getElementById('results');
+            
+            // Show loading
+            loading.style.display = 'block';
+            results.innerHTML = '<p class="text-muted text-center">Calculating...</p>';
+
+            try {
+                // Collect player hands
+                const numPlayers = parseInt(document.getElementById('numPlayers').value);
+                const hands = [];
+                
+                for (let i = 1; i <= numPlayers; i++) {
+                    const card1 = document.getElementById(`player${i}card1`).value.trim().toLowerCase();
+                    const card2 = document.getElementById(`player${i}card2`).value.trim().toLowerCase();
+                    
+                    if (card1 && card2 && card1.length === 2 && card2.length === 2) {
+                        hands.push([card1, card2]);
+                    } else {
+                        results.innerHTML = '<div class="alert alert-warning">Please enter valid cards for all players</div>';
+                        loading.style.display = 'none';
+                        return;
+                    }
+                }
+
+                // Collect board cards based on current phase
+                const board = [];
+                const cardsNeeded = currentPhase === 'preflop' ? 0 : 
+                                   currentPhase === 'flop' ? 3 : 
+                                   currentPhase === 'turn' ? 4 : 5;
+                
+                for (let i = 0; i < cardsNeeded; i++) {
+                    const card = document.getElementById(`board${i}`).value.trim().toLowerCase();
+                    if (card && card.length === 2) {
+                        board.push(card);
+                    }
+                }
+
+                // Validate inputs
+                const validationError = validateInputs(hands, board);
+                if (validationError) {
+                    results.innerHTML = `<div class="alert alert-warning"><strong>Input Error:</strong> ${validationError}</div>`;
+                    loading.style.display = 'none';
+                    return;
+                }
+
+                console.log('Calculating odds for:', { hands, board });
+
+                // Call the Python script
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        hands: hands,
+                        board: board,
+                        num_sims: 1000
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const odds = await response.json();
+                console.log('Python result:', odds);
+
+                // Check for errors
+                if (odds.error) {
+                    results.innerHTML = `<div class="alert alert-danger"><strong>Error:</strong> ${odds.error}</div>`;
+                    return;
+                }
+
+                // Display results
+                displayResults(odds, hands, board);
+                updateOddsDisplay(odds);
+                updateDisplay();
+
+            } catch (error) {
+                console.error('Error calculating odds:', error);
+                results.innerHTML = '<div class="alert alert-danger">Error calculating odds. Please try again.</div>';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayResults(odds, hands, board) {
+            const results = document.getElementById('results');
+            let html = '<h6>Win Percentages:</h6><ul class="list-group list-group-flush">';
+            
+            for (let i = 0; i < hands.length; i++) {
+                const handStr = hands[i].map(card => {
+                    const cardData = formatCard(card);
+                    return `<span class="${cardData.className}">${cardData.symbol}</span>`;
+                }).join(' ');
+                
+                html += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>Player ${i + 1}: ${handStr}</span>
+                        <span class="badge bg-success rounded-pill">${odds.win_percentages[i].toFixed(1)}%</span>
+                    </li>
+                `;
+            }
+            
+            html += '</ul>';
+            
+            if (board.length > 0) {
+                const boardStr = board.map(card => {
+                    const cardData = formatCard(card);
+                    return `<span class="${cardData.className}">${cardData.symbol}</span>`;
+                }).join(' ');
+                html += `<p class="mt-3"><strong>Board:</strong> ${boardStr}</p>`;
+            }
+            
+            results.innerHTML = html;
+        }
+
+        function updateOddsDisplay(odds) {
+            const numPlayers = parseInt(document.getElementById('numPlayers').value);
+            for (let i = 1; i <= numPlayers; i++) {
+                const oddsDiv = document.getElementById(`player${i}-odds`);
+                if (oddsDiv && odds.win_percentages && odds.win_percentages[i-1] !== undefined) {
+                    oddsDiv.innerHTML = `
+                        <div class="win">Win: ${odds.win_percentages[i-1].toFixed(1)}%</div>
+                        <div class="tie">Tie: ${odds.tie_percentages[i-1].toFixed(1)}%</div>
+                    `;
+                }
+            }
+        }
+
+        function updateDisplay() {
+            // Get current hands and board
+            const numPlayers = parseInt(document.getElementById('numPlayers').value);
+            const hands = [];
+            const board = [];
+            
+            // Collect player hands
+            for (let i = 1; i <= numPlayers; i++) {
+                const card1 = document.getElementById(`player${i}card1`).value.trim().toLowerCase();
+                const card2 = document.getElementById(`player${i}card2`).value.trim().toLowerCase();
+                if (card1 && card2 && card1.length === 2 && card2.length === 2) {
+                    hands.push([card1, card2]);
+                } else {
+                    hands.push([]);
+                }
+            }
+            
+            // Collect board cards based on current phase
+            const cardsNeeded = currentPhase === 'preflop' ? 0 : 
+                               currentPhase === 'flop' ? 3 : 
+                               currentPhase === 'turn' ? 4 : 5;
+            
+            for (let i = 0; i < cardsNeeded; i++) {
+                const card = document.getElementById(`board${i}`).value.trim().toLowerCase();
+                if (card && card.length === 2) {
+                    board.push(card);
+                }
+            }
+            
+            // Update community cards
+            const communityDiv = document.getElementById('community-cards');
+            communityDiv.innerHTML = board.map(card => {
+                const cardData = formatCard(card);
+                return `<div class="card-display-small ${cardData.className}">${cardData.symbol}</div>`;
+            }).join('');
+            
+            // Update player cards
+            const playersDisplay = document.getElementById('players-display');
+            let playersHtml = '';
+            
+            for (let i = 0; i < numPlayers; i++) {
+                const playerCards = hands[i] || [];
+                const playerNum = i + 1;
+                
+                playersHtml += `
+                    <div class="player-display" style="position: absolute; ${getPlayerPosition(i, numPlayers)}">
+                        <div class="player-cards">
+                            ${playerCards.map(card => {
+                                const cardData = formatCard(card);
+                                return `<div class="card-display-small ${cardData.className}">${cardData.symbol}</div>`;
+                            }).join('')}
+                        </div>
+                        <div class="player-label">Player ${playerNum}</div>
+                    </div>
+                `;
+            }
+            
+            playersDisplay.innerHTML = playersHtml;
+        }
+        
+        function getPlayerPosition(index, totalPlayers) {
+            const angle = (360 / totalPlayers) * index;
+            const radius = 150; // Reduced distance from center
+            const x = Math.cos((angle - 90) * Math.PI / 180) * radius;
+            const y = Math.sin((angle - 90) * Math.PI / 180) * radius;
+            
+            return `left: calc(50% + ${x}px); top: calc(50% + ${y}px); transform: translate(-50%, -50%);`;
+        }
+
+        // Initialize
+        updatePlayerInputs();
+        updateBoardInputs();
+        updateDisplay();
+        
+        // Add event listeners to update display when inputs change
+        document.addEventListener('input', function(e) {
+            if (e.target.id.includes('player') || e.target.id.includes('board')) {
+                updateDisplay();
+            }
+        });
+        
+        document.addEventListener('change', function(e) {
+            if (e.target.id === 'numPlayers' || e.target.id.includes('phase')) {
+                updateDisplay();
+            }
+        });
+    </script>
+</body>
+</html>

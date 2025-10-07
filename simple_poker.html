@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Simulator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f0f0f0; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .card { background: white; padding: 20px; margin: 10px 0; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .poker-table { background: #0d5016; width: 600px; height: 400px; border-radius: 50%; margin: 20px auto; position: relative; border: 8px solid #8B4513; }
+        .community-cards { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 10px; }
+        .card-display { background: white; width: 40px; height: 60px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #333; }
+        .player { position: absolute; background: #6c757d; color: white; padding: 10px; border-radius: 10px; min-width: 120px; text-align: center; }
+        .player.active { background: #ffc107; color: black; }
+        .player-1 { top: 20px; left: 20px; }
+        .player-2 { top: 20px; right: 20px; }
+        .player-3 { bottom: 20px; right: 20px; }
+        .player-4 { bottom: 20px; left: 20px; }
+        .controls { text-align: center; margin: 20px 0; }
+        .btn { background: #007bff; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+        .odds { margin-top: 10px; font-size: 12px; }
+        .win { color: #28a745; }
+        .tie { color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Poker Simulator - Simple Version</h1>
+        
+        <div class="card">
+            <h3>Controls</h3>
+            <div class="controls">
+                <button class="btn" onclick="dealHands()">Deal Hands</button>
+                <button class="btn" onclick="dealFlop()">Deal Flop</button>
+                <button class="btn" onclick="dealTurn()">Deal Turn</button>
+                <button class="btn" onclick="dealRiver()">Deal River</button>
+                <button class="btn" onclick="reset()">New Hand</button>
+            </div>
+            <p>Phase: <span id="phase">Preflop</span> | Steps: <span id="steps">0</span></p>
+        </div>
+
+        <div class="card">
+            <h3>Poker Table</h3>
+            <div class="poker-table">
+                <div class="community-cards" id="community-cards"></div>
+                <div class="player player-1 active" id="player1">
+                    <div>Player 1</div>
+                    <div id="player1-cards"></div>
+                    <div class="odds" id="player1-odds"></div>
+                </div>
+                <div class="player player-2" id="player2">
+                    <div>Player 2</div>
+                    <div id="player2-cards"></div>
+                    <div class="odds" id="player2-odds"></div>
+                </div>
+                <div class="player player-3" id="player3">
+                    <div>Player 3</div>
+                    <div id="player3-cards"></div>
+                    <div class="odds" id="player3-odds"></div>
+                </div>
+                <div class="player player-4" id="player4">
+                    <div>Player 4</div>
+                    <div id="player4-cards"></div>
+                    <div class="odds" id="player4-odds"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            players: [[], [], [], []],
+            board: [],
+            phase: 'preflop',
+            steps: 0
+        };
+
+        const suits = ['s', 'h', 'd', 'c'];
+        const faces = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+        const suitSymbols = {'s': '♠', 'h': '♥', 'd': '♦', 'c': '♣'};
+
+        function formatCard(card) {
+            if (card.length !== 2) return card;
+            const face = card[0].toUpperCase();
+            const suit = card[1].toLowerCase();
+            const suitSymbol = suitSymbols[suit];
+            return `${face}${suitSymbol}`;
+        }
+
+        function generateRandomCard() {
+            const face = faces[Math.floor(Math.random() * faces.length)];
+            const suit = suits[Math.floor(Math.random() * suits.length)];
+            return face + suit;
+        }
+
+        function generateRandomHand() {
+            const usedCards = new Set();
+            const hand = [];
+            while (hand.length < 2) {
+                const card = generateRandomCard();
+                if (!usedCards.has(card)) {
+                    usedCards.add(card);
+                    hand.push(card);
+                }
+            }
+            return hand;
+        }
+
+        function updateDisplay() {
+            // Update community cards
+            const communityDiv = document.getElementById('community-cards');
+            communityDiv.innerHTML = gameState.board.map(card => 
+                `<div class="card-display">${formatCard(card)}</div>`
+            ).join('');
+
+            // Update player cards and odds
+            for (let i = 0; i < 4; i++) {
+                const playerDiv = document.getElementById(`player${i+1}-cards`);
+                const oddsDiv = document.getElementById(`player${i+1}-odds`);
+                
+                if (gameState.players[i].length > 0) {
+                    playerDiv.innerHTML = gameState.players[i].map(card => 
+                        `<div class="card-display" style="width: 25px; height: 35px; font-size: 10px;">${formatCard(card)}</div>`
+                    ).join('');
+                } else {
+                    playerDiv.innerHTML = '';
+                }
+                oddsDiv.innerHTML = '';
+            }
+
+            // Update phase and steps
+            document.getElementById('phase').textContent = gameState.phase;
+            document.getElementById('steps').textContent = gameState.steps;
+        }
+
+        async function calculateOdds() {
+            try {
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        hands: gameState.players,
+                        board: gameState.board,
+                        num_sims: 1000
+                    })
+                });
+                
+                if (response.ok) {
+                    const odds = await response.json();
+                    // Update odds display
+                    for (let i = 0; i < 4; i++) {
+                        const oddsDiv = document.getElementById(`player${i+1}-odds`);
+                        if (odds.win_percentages && odds.win_percentages[i] !== undefined) {
+                            oddsDiv.innerHTML = `
+                                <div class="win">Win: ${odds.win_percentages[i].toFixed(1)}%</div>
+                                <div class="tie">Tie: ${odds.tie_percentages[i].toFixed(1)}%</div>
+                            `;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error calculating odds:', error);
+            }
+        }
+
+        function dealHands() {
+            gameState.players = [];
+            for (let i = 0; i < 4; i++) {
+                gameState.players.push(generateRandomHand());
+            }
+            gameState.board = [];
+            gameState.phase = 'preflop';
+            gameState.steps++;
+            updateDisplay();
+            calculateOdds();
+        }
+
+        function dealFlop() {
+            gameState.board = [generateRandomCard(), generateRandomCard(), generateRandomCard()];
+            gameState.phase = 'flop';
+            gameState.steps++;
+            updateDisplay();
+            calculateOdds();
+        }
+
+        function dealTurn() {
+            gameState.board.push(generateRandomCard());
+            gameState.phase = 'turn';
+            gameState.steps++;
+            updateDisplay();
+            calculateOdds();
+        }
+
+        function dealRiver() {
+            gameState.board.push(generateRandomCard());
+            gameState.phase = 'river';
+            gameState.steps++;
+            updateDisplay();
+            calculateOdds();
+        }
+
+        function reset() {
+            gameState = {
+                players: [[], [], [], []],
+                board: [],
+                phase: 'preflop',
+                steps: 0
+            };
+            updateDisplay();
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>

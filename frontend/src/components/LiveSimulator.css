@@ -1,0 +1,375 @@
+.live-simulator {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d5016 0%, #1a7a2e 50%, #0d5016 100%);
+  color: white;
+  padding: 2rem;
+}
+
+.simulator-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.header-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.back-button {
+  background: linear-gradient(45deg, #6c757d, #495057);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.back-button:hover {
+  background: linear-gradient(45deg, #495057, #6c757d);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.simulator-header h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.simulator-header p {
+  font-size: 1.2rem;
+  color: #d4edda;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.control-btn:hover:not(:disabled) {
+  background: linear-gradient(45deg, #20c997, #28a745);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.control-btn.pause {
+  background: linear-gradient(45deg, #dc3545, #fd7e14);
+}
+
+.control-btn.reset {
+  background: linear-gradient(45deg, #6c757d, #495057);
+}
+
+.control-btn.step {
+  background: linear-gradient(45deg, #17a2b8, #138496);
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.speed-control label {
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.speed-control select {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.speed-control select option {
+  background: #0d5016;
+  color: white;
+}
+
+/* Game Info */
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.phase, .simulation-count {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.phase strong, .simulation-count strong {
+  color: #ffd700;
+}
+
+.new-simulation-btn {
+  background: linear-gradient(45deg, #ffd700, #ffed4e);
+  color: #0d5016;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.new-simulation-btn:hover {
+  background: linear-gradient(45deg, #ffed4e, #ffd700);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Poker Table */
+.poker-table {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 30px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Community Cards */
+.community-cards {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.community-cards h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #ffd700;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Cards */
+.card {
+  width: 60px;
+  height: 80px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  animation: cardDeal 0.5s ease-out;
+}
+
+@keyframes cardDeal {
+  0% {
+    transform: translateY(-50px) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.card.red {
+  color: #dc3545;
+}
+
+.card.black {
+  color: #000;
+}
+
+.community-card {
+  border: 3px solid #ffd700;
+  box-shadow: 0 6px 12px rgba(255, 215, 0, 0.3);
+}
+
+.player-card {
+  border: 2px solid #28a745;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.card-placeholder {
+  width: 60px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Players */
+.players {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.player {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.player.active {
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.player-info {
+  margin-bottom: 1rem;
+}
+
+.player-info h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #ffd700;
+}
+
+.odds {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.win-percentage {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.tie-percentage {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.hand-ranking {
+  color: #17a2b8;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.player-cards {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .live-simulator {
+    padding: 1rem;
+  }
+  
+  .simulator-header h1 {
+    font-size: 2rem;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .control-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .game-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .poker-table {
+    padding: 1rem;
+  }
+  
+  .players {
+    grid-template-columns: 1fr;
+  }
+  
+  .card {
+    width: 50px;
+    height: 70px;
+    font-size: 1rem;
+  }
+  
+  .card-placeholder {
+    width: 50px;
+    height: 70px;
+  }
+}
