@@ -9,7 +9,7 @@ interface PlayerProps {
   tiePercentage?: number;
 }
 
-const Player: React.FC<PlayerProps> = ({ name, cards, isActive, position, winPercentage, tiePercentage }) => {
+const Player: React.FC<PlayerProps> = ({ name, cards, isActive, winPercentage, tiePercentage }) => {
   const formatCard = (card: string) => {
     if (card.length !== 2) return card;
     const face = card[0].toUpperCase();

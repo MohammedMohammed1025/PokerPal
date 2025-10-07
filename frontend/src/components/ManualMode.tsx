@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PokerTable from './PokerTable';
 import HandInputForm from './HandInputForm';
-import OddsDisplay from './OddsDisplay';
 import GameControls from './GameControls';
 
 interface Player {
@@ -28,7 +27,7 @@ const ManualMode: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const [board, setBoard] = useState<string[]>([]);
   const [gamePhase, setGamePhase] = useState<'preflop' | 'flop' | 'turn' | 'river'>('preflop');
   const [odds, setOdds] = useState<OddsData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const handleHandSubmit = async (hand: string[]) => {
     // Update the active player's hand

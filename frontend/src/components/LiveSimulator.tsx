@@ -214,7 +214,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
 
   // Auto simulation effect
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: number;
     
     if (isSimulating && !isRiverComplete) {
       interval = setInterval(() => {
@@ -236,7 +236,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
 
   // Format card for display
   const formatCard = (card: string) => {
-    if (card.length !== 2) return card;
+    if (!card || card.length !== 2) return { symbol: card || '', isRed: false };
     const face = card[0].toUpperCase();
     const suit = card[1].toLowerCase();
     const suitSymbols = { 's': '♠', 'h': '♥', 'd': '♦', 'c': '♣' };
