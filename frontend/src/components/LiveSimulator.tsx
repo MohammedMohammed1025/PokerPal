@@ -256,7 +256,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
             </button>
           )}
         </div>
-        <h1>🎲 Live Simulator</h1>
+        <h1>🎲 PokerPal Live Simulator</h1>
         <p>Watch poker hands unfold in real-time with Monte Carlo analysis</p>
       </div>
 

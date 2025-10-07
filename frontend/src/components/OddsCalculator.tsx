@@ -171,7 +171,7 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
             </button>
           )}
         </div>
-        <h1>📊 Odds Calculator</h1>
+        <h1>📊 PokerPal Odds Calculator</h1>
         <p>Input specific hands and board cards for precise win percentages</p>
       </div>
 

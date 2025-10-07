@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import LiveSimulator from './components/LiveSimulator'
 import OddsCalculator from './components/OddsCalculator'
+import RangeCalculator from './components/RangeCalculator'
+import EducationalContent from './components/EducationalContent'
 
-type AppMode = 'menu' | 'simulator' | 'calculator'
+type AppMode = 'menu' | 'simulator' | 'calculator' | 'range' | 'education'
 
 function App() {
   const [currentMode, setCurrentMode] = useState<AppMode>('menu')
 
-  const handleModeSelect = (mode: 'simulator' | 'calculator') => {
+  const handleModeSelect = (mode: 'simulator' | 'calculator' | 'range' | 'education') => {
     setCurrentMode(mode)
   }
 
@@ -24,6 +26,14 @@ function App() {
     return <OddsCalculator onBack={handleBackToMenu} />
   }
 
+  if (currentMode === 'range') {
+    return <RangeCalculator onBack={handleBackToMenu} />
+  }
+
+  if (currentMode === 'education') {
+    return <EducationalContent onBack={handleBackToMenu} />
+  }
+
   return (
     <div className="main-menu">
       <div className="hero-section">
@@ -33,7 +43,7 @@ function App() {
           <span className="suit suit-diamond">♦</span>
           <span className="suit suit-club">♣</span>
         </div>
-        <h1 className="main-title">ALL IN SIM</h1>
+        <h1 className="main-title">PokerPal</h1>
         <p className="subtitle">Professional Poker Analysis & Simulation Platform</p>
         <p className="description">
           Master poker with advanced Monte Carlo simulations, real-time odds calculation, 
@@ -55,6 +65,20 @@ function App() {
           <p>Input your specific hands and board cards to get precise win percentages, hand rankings, and detailed probability analysis.</p>
           <button className="feature-button">Calculate Odds</button>
         </div>
+
+        <div className="feature-card" onClick={() => handleModeSelect('range')}>
+          <div className="feature-icon">🎯</div>
+          <h3>Range vs Range</h3>
+          <p>Compare hand ranges and calculate equity between different playing styles. Perfect for understanding range interactions and GTO play.</p>
+          <button className="feature-button">Compare Ranges</button>
+        </div>
+
+        <div className="feature-card" onClick={() => handleModeSelect('education')}>
+          <div className="feature-icon">📚</div>
+          <h3>Learn Poker</h3>
+          <p>Master poker fundamentals with hand rankings, strategy tips, terminology, and interactive quizzes to improve your game.</p>
+          <button className="feature-button">Start Learning</button>
+        </div>
       </div>
 
       <div className="info-section">
@@ -65,12 +89,20 @@ function App() {
             <p>Run thousands of simulations to get accurate win percentages</p>
           </div>
           <div className="info-item">
-            <strong>Hand Rankings</strong>
-            <p>Get instant hand strength analysis using professional poker evaluation</p>
+            <strong>Range vs Range</strong>
+            <p>Compare hand ranges and calculate equity between different playing styles</p>
+          </div>
+          <div className="info-item">
+            <strong>Educational Content</strong>
+            <p>Learn poker fundamentals with interactive quizzes and strategy guides</p>
           </div>
           <div className="info-item">
             <strong>Real-time Updates</strong>
             <p>See odds change as community cards are revealed</p>
+          </div>
+          <div className="info-item">
+            <strong>Hand Rankings</strong>
+            <p>Get instant hand strength analysis using professional poker evaluation</p>
           </div>
           <div className="info-item">
             <strong>Multiple Players</strong>
