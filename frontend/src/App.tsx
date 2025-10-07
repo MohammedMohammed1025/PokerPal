@@ -5,9 +5,8 @@ import OddsCalculator from './components/OddsCalculator'
 import RangeCalculator from './components/RangeCalculator'
 import EducationalContent from './components/EducationalContent'
 
-// NOTE: This is a frontend-only demo for GitHub Pages
-// The Python backend (pokersim.py) requires a local server to run
-// For full functionality, run: python3 test_server.py (backend) + npm run dev (frontend)
+// This is the main app - just a UI demo on GitHub Pages
+// To get real poker calculations, run the Python server locally
 
 type AppMode = 'menu' | 'simulator' | 'calculator' | 'range' | 'education'
 

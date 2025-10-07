@@ -26,11 +26,11 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
   const [gamePhase, setGamePhase] = useState<'preflop' | 'flop' | 'turn' | 'river'>('preflop');
   const [odds, setOdds] = useState<OddsData | null>(null);
   const [isSimulating, setIsSimulating] = useState(false);
-  const [simulationSpeed, setSimulationSpeed] = useState(2000); // 2 seconds
+  const [simulationSpeed, setSimulationSpeed] = useState(2000); // how fast cards deal
   const [simulationCount, setSimulationCount] = useState(0);
   const [isRiverComplete, setIsRiverComplete] = useState(false);
 
-  // Generate random hand
+  // pick 2 random cards for a player
   const generateRandomHand = useCallback((usedCards: Set<string>) => {
     const faces = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
     const suits = ['s', 'h', 'd', 'c'];
@@ -52,7 +52,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
     return hand;
   }, []);
 
-  // Generate random board
+  // pick random community cards (flop/turn/river)
   const generateRandomBoard = useCallback((phase: 'flop' | 'turn' | 'river', usedCards: Set<string>) => {
     const faces = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
     const suits = ['s', 'h', 'd', 'c'];
@@ -76,7 +76,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
     return newCards;
   }, []);
 
-  // Calculate odds using backend
+  // ask the Python server for win percentages
   const calculateOdds = useCallback(async (hands: string[][], board: string[]) => {
     try {
       const response = await fetch('http://localhost:8000/calculate', {
@@ -105,10 +105,10 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
       return result;
     } catch (error) {
       console.error('Error calling Python backend:', error);
-      // Show demo mode message
+      // show warning when Python server isn't running
       alert('🎮 Demo Mode: Backend not available. Showing sample data. For real calculations, run locally with: python3 test_server.py');
       
-      // Fallback to mock data
+      // make up some fake percentages
       const winPercentages = hands.map(() => Math.random() * 100);
       const tiePercentages = hands.map(() => Math.random() * 20);
       
@@ -126,7 +126,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
     }
   }, []);
 
-  // Initialize game
+  // start a new poker hand
   const initializeGame = useCallback(() => {
     const numPlayers = 4;
     const newPlayers = Array.from({ length: numPlayers }, (_, i) => ({
@@ -143,10 +143,10 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
     setSimulationCount(0);
   }, []);
 
-  // Step through simulation
+  // deal the next cards (flop, turn, river)
   const nextStep = useCallback(async () => {
     if (gamePhase === 'preflop') {
-      // Deal initial hands
+      // give each player 2 cards
       const usedCards = new Set<string>();
       const newPlayers = players.map(player => ({
         ...player,
@@ -154,14 +154,14 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
       }));
       setPlayers(newPlayers);
       
-      // Calculate preflop odds
+      // check who's winning before flop
       const hands = newPlayers.map(p => p.cards);
       const newOdds = await calculateOdds(hands, []);
       setOdds(newOdds);
       setGamePhase('flop');
       setSimulationCount(prev => prev + 1);
     } else if (gamePhase === 'flop') {
-      // Deal flop
+      // deal 3 community cards
       const usedCards = new Set<string>();
       players.forEach(player => {
         player.cards.forEach(card => usedCards.add(card));
@@ -171,13 +171,13 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
       setBoard(newBoard);
       setGamePhase('turn');
       
-      // Calculate flop odds
+      // check who's winning after flop
       const hands = players.map(p => p.cards);
       const newOdds = await calculateOdds(hands, newBoard);
       setOdds(newOdds);
       setSimulationCount(prev => prev + 1);
     } else if (gamePhase === 'turn') {
-      // Deal turn
+      // deal 1 more community card
       const usedCards = new Set<string>();
       players.forEach(player => {
         player.cards.forEach(card => usedCards.add(card));
@@ -188,13 +188,13 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
       setBoard(newBoard);
       setGamePhase('river');
       
-      // Calculate turn odds
+      // check who's winning after turn
       const hands = players.map(p => p.cards);
       const newOdds = await calculateOdds(hands, newBoard);
       setOdds(newOdds);
       setSimulationCount(prev => prev + 1);
     } else if (gamePhase === 'river') {
-      // Deal river
+      // deal the final community card
       const usedCards = new Set<string>();
       players.forEach(player => {
         player.cards.forEach(card => usedCards.add(card));
@@ -204,13 +204,13 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
       const newBoard = [...board, ...generateRandomBoard('river', usedCards)];
       setBoard(newBoard);
       
-      // Calculate river odds
+      // check final winner
       const hands = players.map(p => p.cards);
       const newOdds = await calculateOdds(hands, newBoard);
       setOdds(newOdds);
       setSimulationCount(prev => prev + 1);
       
-      // Mark river as complete - user can click "New Simulation" to continue
+      // hand is over - click "New Simulation" to start again
       setIsRiverComplete(true);
     }
   }, [gamePhase, players, board, generateRandomHand, generateRandomBoard, calculateOdds]);

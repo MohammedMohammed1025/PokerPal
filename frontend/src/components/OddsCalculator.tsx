@@ -30,7 +30,7 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
   const [isCalculating, setIsCalculating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize players when numPlayers changes
+  // add/remove players when you change the number
   React.useEffect(() => {
     const newPlayers = Array.from({ length: numPlayers }, (_, i) => ({
       id: i,
@@ -40,7 +40,7 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
     setPlayers(newPlayers);
   }, [numPlayers]);
 
-  // Update community cards based on game stage
+  // set up community cards based on what stage you pick
   React.useEffect(() => {
     const maxCards = gameStage === 'preflop' ? 0 : gameStage === 'flop' ? 3 : gameStage === 'turn' ? 4 : 5;
     if (maxCards === 0) {
@@ -53,16 +53,16 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
     }
   }, [gameStage]);
 
-  // Calculate odds using backend
+  // ask the Python server for win percentages
   const calculateOdds = useCallback(async () => {
     setIsCalculating(true);
     setError(null);
     
     try {
-      // Validate all inputs
+      // make sure all cards are filled in
       const allCards: string[] = [];
       
-      // Collect all player cards
+      // get all the player cards
       players.forEach(player => {
         player.cards.forEach(card => {
           if (card.trim()) {
@@ -71,26 +71,26 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
         });
       });
       
-      // Collect community cards
+      // get all the community cards
       communityCards.forEach(card => {
         if (card.trim()) {
           allCards.push(card.trim().toUpperCase());
         }
       });
       
-      // Check for duplicates
+      // make sure no card is used twice
       const uniqueCards = new Set(allCards);
       if (uniqueCards.size !== allCards.length) {
         throw new Error('Duplicate cards detected! Please check your inputs.');
       }
       
-      // Check if all players have 2 cards
+      // make sure everyone has 2 cards
       const incompletePlayers = players.filter(p => p.cards.some(card => !card.trim()));
       if (incompletePlayers.length > 0) {
         throw new Error('All players must have 2 cards!');
       }
       
-      // Prepare data for backend
+      // send the cards to the Python server
       const hands = players.map(p => p.cards.map(card => card.trim().toUpperCase()));
       const board = communityCards.map(card => card.trim().toUpperCase()).filter(card => card);
       
@@ -118,7 +118,7 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
       
       setOdds(result);
     } catch (error) {
-      // Show demo mode message
+      // show warning when Python server isn't running
       alert('🎮 Demo Mode: Backend not available. For real calculations, run locally with: python3 test_server.py');
       setError(error instanceof Error ? error.message : 'An error occurred');
       setOdds(null);
