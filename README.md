@@ -61,53 +61,55 @@ A poker analysis tool I built to combine my love for poker with my CompE coursew
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/pokerpal.git
+   git clone https://github.com/MohammedMohammed1025/PokerPal.git
    cd pokerpal
    ```
 
-2. **Install frontend dependencies**
+2. **Install dependencies**
    ```bash
-   cd frontend
-   npm install
-   ```
-
-3. **Install Python dependencies**
-   ```bash
+   # Frontend dependencies
+   cd frontend && npm install && cd ..
+   
+   # Python dependencies
    pip install treys
    ```
 
-4. **Start the backend server**
+3. **Run the application**
    ```bash
+   # Terminal 1: Start backend server
    python3 test_server.py
+   
+   # Terminal 2: Start frontend
+   cd frontend && npm run dev
    ```
 
-5. **Start the frontend development server**
-   ```bash
-   cd frontend
-   npm run dev
-   ```
+4. **Open your browser**
+   Navigate to `http://localhost:5173`
 
-6. **Open your browser**
-   Navigate to `http://localhost:5173` (or the port shown in terminal)
+### 🌐 Live Demo
+**Frontend Only**: [https://mohammedmohammed1025.github.io/PokerPal](https://mohammedmohammed1025.github.io/PokerPal)
+
+> **Note**: The live demo shows the UI only. For full functionality with odds calculations, run the local setup above.
 
 ## 📁 Project Structure
 
 ```
-pokerpal/
-├── frontend/                 # React frontend
+PokerPal/
+├── frontend/                    # React TypeScript frontend
 │   ├── src/
-│   │   ├── components/      # React components
+│   │   ├── components/         # UI components
 │   │   │   ├── LiveSimulator.tsx
 │   │   │   ├── OddsCalculator.tsx
 │   │   │   ├── RangeCalculator.tsx
 │   │   │   └── EducationalContent.tsx
-│   │   ├── App.tsx          # Main app component
-│   │   └── main.tsx         # Entry point
+│   │   ├── App.tsx            # Main application
+│   │   └── main.tsx           # Entry point
 │   ├── package.json
 │   └── vite.config.ts
 ├── backend/
-│   └── pokersim.py          # Python poker logic
-├── test_server.py           # Python HTTP server
+│   └── pokersim.py            # Python poker calculations
+├── test_server.py             # Local development server
+├── requirements.txt           # Python dependencies
 └── README.md
 ```
 
@@ -162,9 +164,6 @@ The Monte Carlo simulations were probably the coolest part - watching it run tho
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
