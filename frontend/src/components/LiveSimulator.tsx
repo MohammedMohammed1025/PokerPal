@@ -105,6 +105,9 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
       return result;
     } catch (error) {
       console.error('Error calling Python backend:', error);
+      // Show demo mode message
+      alert('🎮 Demo Mode: Backend not available. Showing sample data. For real calculations, run locally with: python3 test_server.py');
+      
       // Fallback to mock data
       const winPercentages = hands.map(() => Math.random() * 100);
       const tiePercentages = hands.map(() => Math.random() * 20);

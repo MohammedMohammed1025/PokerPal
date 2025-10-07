@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PokerTable from './PokerTable';
 
 interface Player {
   name: string;
@@ -94,6 +93,9 @@ const AutoSimulation: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       return result;
     } catch (error) {
       console.error('Error calling Python backend:', error);
+      // Show demo mode message
+      alert('🎮 Demo Mode: Backend not available. For real calculations, run locally with: python3 test_server.py');
+      
       // Fallback to simple mock data if backend is not available
       const winPercentages = hands.map(() => Math.random() * 100);
       const tiePercentages = hands.map(() => Math.random() * 20);

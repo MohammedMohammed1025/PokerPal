@@ -118,6 +118,8 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
       
       setOdds(result);
     } catch (error) {
+      // Show demo mode message
+      alert('🎮 Demo Mode: Backend not available. For real calculations, run locally with: python3 test_server.py');
       setError(error instanceof Error ? error.message : 'An error occurred');
       setOdds(null);
     } finally {
