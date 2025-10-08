@@ -133,9 +133,14 @@ const RangeCalculator: React.FC<RangeCalculatorProps> = ({ onBack }) => {
         }
       }
 
-      // Calculate for each combination
+      // Calculate for each combination (limit to 50 for performance)
       const results = [];
-      for (const hands of allHands) {
+      const maxCombinations = Math.min(50, allHands.length);
+      for (let i = 0; i < maxCombinations; i++) {
+        const hands = allHands[i];
+        
+        // Update progress
+        setError(`Calculating... ${i + 1}/${maxCombinations} combinations`);
         const response = await fetch('/calculate', {
           method: 'POST',
           headers: {
@@ -159,6 +164,9 @@ const RangeCalculator: React.FC<RangeCalculatorProps> = ({ onBack }) => {
 
         results.push(result);
       }
+
+      // Clear progress message
+      setError(null);
 
       // Calculate average equity
       const totalEquity = results.reduce((sum, result) => sum + result.win_percentages[0], 0);
