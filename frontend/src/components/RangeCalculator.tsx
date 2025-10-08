@@ -136,7 +136,7 @@ const RangeCalculator: React.FC<RangeCalculatorProps> = ({ onBack }) => {
       // Calculate for each combination
       const results = [];
       for (const hands of allHands) {
-        const response = await fetch('http://localhost:8000/calculate', {
+        const response = await fetch('/calculate', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

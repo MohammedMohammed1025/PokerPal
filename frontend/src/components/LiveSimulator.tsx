@@ -79,7 +79,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
   // ask the Python server for win percentages
   const calculateOdds = useCallback(async (hands: string[][], board: string[]) => {
     try {
-      const response = await fetch('http://localhost:8000/calculate', {
+      const response = await fetch('/calculate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

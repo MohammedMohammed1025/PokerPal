@@ -94,7 +94,7 @@ const OddsCalculator: React.FC<OddsCalculatorProps> = ({ onBack }) => {
       const hands = players.map(p => p.cards.map(card => card.trim().toUpperCase()));
       const board = communityCards.map(card => card.trim().toUpperCase()).filter(card => card);
       
-      const response = await fetch('http://localhost:8000/calculate', {
+            const response = await fetch('/calculate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
