@@ -46,8 +46,8 @@ A poker analysis tool I built to combine my love for poker with my CompE coursew
 
 ### Backend
 - **Python 3.12** with `treys` library for poker hand evaluation
+- **Flask** web framework for clean API endpoints
 - **Monte Carlo simulation** for accurate odds calculation
-- **HTTP server** for API endpoints
 - **CORS support** for frontend integration
 
 ## 🚀 Quick Start
@@ -67,11 +67,12 @@ A poker analysis tool I built to combine my love for poker with my CompE coursew
 
 2. **Install dependencies**
    ```bash
-   # Frontend dependencies
-   cd frontend && npm install && cd ..
+   # Install all dependencies
+   npm run install-all
    
-   # Python dependencies
-   pip install treys
+   # Or install separately:
+   # Frontend: cd frontend && npm install
+   # Backend: pip install -r requirements.txt
    ```
 
 3. **Run the application**
@@ -87,9 +88,9 @@ A poker analysis tool I built to combine my love for poker with my CompE coursew
    Navigate to `http://localhost:5173`
 
 ### 🌐 Live Demo
-**Frontend Only**: [https://mohammedmohammed1025.github.io/PokerPal](https://mohammedmohammed1025.github.io/PokerPal)
+**Full Application**: [https://awake-friendship-production.up.railway.app](https://awake-friendship-production.up.railway.app)
 
-> **Note**: The live demo shows the UI only. For full functionality with odds calculations, run the local setup above.
+> **Note**: The live demo includes full functionality with real poker calculations powered by the Flask backend.
 
 ## 📁 Project Structure
 
@@ -108,8 +109,8 @@ PokerPal/
 │   └── vite.config.ts
 ├── backend/
 │   └── pokersim.py            # Python poker calculations
-├── app.py                     # Flask server
-├── requirements.txt           # Python dependencies
+├── app.py                     # Flask server (18 lines, clean & simple)
+├── requirements.txt           # Python dependencies (treys, flask, flask-cors)
 └── README.md
 ```
 
@@ -144,7 +145,7 @@ PokerPal/
 
 ## 🚧 Challenges & Lessons Learned
 
-Building PokerPal taught me a lot about full-stack development. The biggest challenge was getting the Python `treys` library to work smoothly with React - I had to create a custom HTTP server to bridge them since you can't run Python directly in the browser.
+Building PokerPal taught me a lot about full-stack development. The biggest challenge was getting the Python `treys` library to work smoothly with React - I had to create a Flask server to bridge them since you can't run Python directly in the browser.
 
 I also spent way too much time debugging duplicate card issues in the simulations. Turns out keeping track of used cards across different game phases is trickier than it looks!
 
@@ -152,9 +153,11 @@ The most rewarding part was seeing the Monte Carlo simulations actually work. Ru
 
 ## 🎯 What I Learned
 
-This project was a great way to practice full-stack development. I got to work with React and TypeScript on the frontend, Python for the heavy math stuff, and learned how to connect them with a simple HTTP server.
+This project was a great way to practice full-stack development. I got to work with React and TypeScript on the frontend, Python for the heavy math stuff, and learned how to connect them with Flask.
 
 The Monte Carlo simulations were probably the coolest part - watching it run thousands of poker hands to calculate accurate odds was pretty satisfying. Also learned a ton about state management in React, especially when dealing with real-time updates.
+
+Deploying to Railway taught me about production deployments and how to handle environment variables and static file serving in Flask.
 
 ## 🤝 Contributing
 

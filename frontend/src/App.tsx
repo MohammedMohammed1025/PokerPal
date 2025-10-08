@@ -5,8 +5,8 @@ import OddsCalculator from './components/OddsCalculator'
 import RangeCalculator from './components/RangeCalculator'
 import EducationalContent from './components/EducationalContent'
 
-// This is the main app - just a UI demo on GitHub Pages
-// To get real poker calculations, run the Python server locally
+// PokerPal - Professional Poker Analysis Platform
+// Full-stack application with React frontend and Flask backend
 
 type AppMode = 'menu' | 'simulator' | 'calculator' | 'range' | 'education'
 
