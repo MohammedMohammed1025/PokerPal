@@ -105,24 +105,7 @@ const LiveSimulator: React.FC<LiveSimulatorProps> = ({ onBack }) => {
       return result;
     } catch (error) {
       console.error('Error calling Python backend:', error);
-      // show warning when Python server isn't running
-            alert('🎮 Demo Mode: Backend not available. Showing sample data. For real calculations, run locally with: python3 app.py');
-      
-      // make up some fake percentages
-      const winPercentages = hands.map(() => Math.random() * 100);
-      const tiePercentages = hands.map(() => Math.random() * 20);
-      
-      const total = winPercentages.reduce((sum, val) => sum + val, 0);
-      const normalizedWins = winPercentages.map(val => (val / total) * 100);
-      const normalizedTies = tiePercentages.map(val => (val / total) * 100);
-      
-      return {
-        wins: normalizedWins.map(val => Math.floor(val * 10)),
-        ties: normalizedTies.map(val => Math.floor(val * 10)),
-        win_percentages: normalizedWins,
-        tie_percentages: normalizedTies,
-        hand_rankings: hands.map(() => 'High Card')
-      };
+      throw new Error('Failed to calculate odds. Please try again.');
     }
   }, []);
 

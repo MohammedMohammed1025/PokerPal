@@ -174,8 +174,6 @@ const RangeCalculator: React.FC<RangeCalculatorProps> = ({ onBack }) => {
       });
 
     } catch (error) {
-      // Show demo mode message
-            alert('🎮 Demo Mode: Backend not available. For real calculations, run locally with: python3 app.py');
       setError(error instanceof Error ? error.message : 'An error occurred');
       setResults(null);
     } finally {
