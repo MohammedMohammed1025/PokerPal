@@ -2,15 +2,15 @@
   "name": "pokerpal",
   "version": "1.0.0",
   "description": "Professional Poker Analysis & Simulation Platform",
-  "main": "test_server.py",
+  "main": "app.py",
   "scripts": {
-    "start": "python3 test_server.py",
+    "start": "python3 app.py",
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
     "install-frontend": "cd frontend && npm install",
     "install-backend": "pip install treys",
     "install-all": "npm run install-backend && npm run install-frontend",
-    "serve": "python3 test_server.py & cd frontend && npm run dev"
+    "serve": "python3 app.py & cd frontend && npm run dev"
   },
   "keywords": [
     "poker",

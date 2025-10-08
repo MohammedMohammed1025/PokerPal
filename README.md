@@ -77,7 +77,7 @@ A poker analysis tool I built to combine my love for poker with my CompE coursew
 3. **Run the application**
    ```bash
    # Terminal 1: Start backend server
-   python3 test_server.py
+   python3 app.py
    
    # Terminal 2: Start frontend
    cd frontend && npm run dev
@@ -108,7 +108,7 @@ PokerPal/
 │   └── vite.config.ts
 ├── backend/
 │   └── pokersim.py            # Python poker calculations
-├── test_server.py             # Local development server
+├── app.py                     # Flask server
 ├── requirements.txt           # Python dependencies
 └── README.md
 ```
