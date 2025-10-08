@@ -32,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/MohammedMohammed1025/PokerPal/issues"
   },
-  "homepage": "https://awake-friendship-production.up.railway.app",
+  "homepage": "https://pokerpal.up.railway.app",
   "engines": {
     "node": ">=18.0.0",
     "python": ">=3.12.0"

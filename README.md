@@ -88,7 +88,7 @@ A poker analysis tool I built to combine my love for poker with my CompE coursew
    Navigate to `http://localhost:5173`
 
 ### 🌐 Live Demo
-**Full Application**: [https://awake-friendship-production.up.railway.app](https://awake-friendship-production.up.railway.app)
+**Full Application**: [https://pokerpal.up.railway.app](https://pokerpal.up.railway.app)
 
 > **Note**: The live demo includes full functionality with real poker calculations powered by the Flask backend.
 
